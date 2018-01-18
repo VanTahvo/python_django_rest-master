@@ -1,0 +1,395 @@
+<html>
+
+Add to tables<br><br>
+
+<button onClick="addGroups()">Add Groups</button>
+<button onClick="addUsers()">Add Users</button>
+<button onClick="addCars()">Add Cars</button>
+<button onClick="addLivings()">Add Livings</button><br>
+<br>
+
+<div id="addGroups" style="display: none;">
+
+Add to group table<br>
+Group name:<input type="text" id="group"><br>
+<button onClick="postGroups()">Save group</button><br>
+<br></div>
+
+<div id="addUsers" style="display: none;">
+
+Add to user table<br>
+Username:<input type="text" id="username"><br>
+Email:<input type="text" id="email"><br>
+<button onClick="postUser()">Save user</button><br>
+
+<br></div>
+
+<div id="addCars" style="display: none;">
+
+Add to car table<br>
+Make:<input type="text" id="make"><br>
+Model:<input type="text" id="model"><br>
+Model Year:<input type="text" id="year"><br>
+Licence plate:<input type="text" id="plate"><br>
+Color:<input type="text" id="color"><br>
+<button onClick="postCar()">Save car</button><br>
+
+<br></div>
+
+<div id="addLivings" style="display: none;">
+
+Add to living table<br>
+City:<input type="text" id="city"><br>
+District:<input type="text" id="district"><br>
+Housing type:<input type="text" id="house"><br>
+Heating:<input type="text" id="heating"><br>
+Avg. mothly cost:<input type="text" id="cost"><br>
+<button onClick="postLiving()">Save living</button><br>
+
+<br></div>
+
+<button onClick="getGroups()">Show Groups table</button>
+<button onClick="getUsers()">Show Users table</button>
+<button onClick="getCars()">Show Cars table</button>
+<button onClick="getLivings()">Show Livings table</button>
+<br><br>
+
+<div id="tableGroups" style="display: none;">
+
+<br></div>
+
+<div id="tableUsers" style="display: none;">
+
+<br></div>
+
+<div id="tableCars" style="display: none;">
+
+<br></div>
+
+<div id="tableLivings" style="display: none;">
+
+<br></div>
+
+<script>
+function getGroups(){
+	var request = new XMLHttpRequest();
+	request.open("GET", "http://localhost:8000/groups", false);
+	request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	request.send();
+	var array = JSON.parse(request.responseText);
+	var tableGroups="<table><tr><th>Edit</th><th>Delete</th><th>Group name</th></tr>";
+	for(var i=0;i<array.length;i++){
+		tableUsers+="<tr><td> <button onClick='putGroups()'>Edit</button>" + "</td><td> <button onClick='deleteGroups()'>Delete</button>" + "</td><td>" + array[i].username + "</td></tr>";
+	}
+	tableGroups+="</table>";
+	document.write(tableGroups);
+	document.getElementById("tableGroups").innerHTML=JSON.stringify(array);
+	if (document.getElementById("tableGroups").style.display === "block") {
+		document.getElementById("tableGroups").style.display = "none";
+    } else {
+        document.getElementById("tableGroups").style.display = "block";
+    }
+}
+
+function getUsers(){
+	var request = new XMLHttpRequest();
+	request.open("GET", "http://localhost:8000/users", false);
+	request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	request.send();
+	var array = JSON.parse(request.responseText);
+	var tableUsers="<table><tr><th>Edit</th><th>Delete</th><th>Username</th><th>Email</th></tr>";
+	for(var i=0;i<array.length;i++){
+		tableUsers+="<tr><td> <button onClick='putUsers()'>Edit</button>" + "</td><td> <button onClick='deleteUsers()'>Delete</button>" + "</td><td>" + array[i].username + "</td><td>" + array[i].email + "</td></tr>";
+	}
+	tableUsers+="</table>";
+	document.write(tableUsers);
+	document.getElementById("tableUsers").innerHTML=JSON.stringify(array);
+	if (document.getElementById("tableUsers").style.display === "block") {
+		document.getElementById("tableUsers").style.display = "none";
+    } else {
+        document.getElementById("tableUsers").style.display = "block";
+    }
+}
+
+function getCars(){
+	var request = new XMLHttpRequest();
+	request.open("GET", "http://localhost:8000/cars", false);
+	request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	request.send();
+	var array = JSON.parse(request.responseText);
+	document.getElementById("tableCars").innerHTML=JSON.stringify(array);
+	var tableCars="<table><tr><th>Edit</th><th>Delete</th><th>Make</th><th>Model</th><th>Model year</th><th>Licence plate</th><th>Color</th></tr>";
+	for(var i=0;i<array.length;i++){
+		tableCars+="<tr><td> <button onClick='putCars()'>Edit</button>" + "</td><td> <button onClick='deleteCars()'>Delete</button>" + "</td><td>" + array[i].make + "</td><td>" + array[i].model + "</td><td>" + array[i].year + "</td><td>" + array[i].plate + "</td><td>" + array[i].plate + "</td></tr>";
+	}
+	tableCars+="</table>";
+	document.write(tableCars);
+	if (document.getElementById("tableCars").style.display === "block") {
+		document.getElementById("tableCars").style.display = "none";
+    } else {
+        document.getElementById("tableCars").style.display = "block";
+    }
+}
+
+function getLivings(){
+	var request = new XMLHttpRequest();
+	request.open("GET", "http://localhost:8000/livings", false);
+	request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	request.send();
+	var array = JSON.parse(request.responseText);
+	var tableLivings="<table><tr><th>Edit</th><th>Delete</th><th>City</th><th>District</th><th>Housing type</th><th>Heating</th><th>Avg. mothly cost</th></tr>";
+	for(var i=0;i<array.length;i++){
+		tableLivings+="<tr><td> <button onClick='putLivings()'>Edit</button>" + "</td><td> <button onClick='deleteLivings()'>Delete</button>" + "</td><td>" + array[i].city + "</td><td>" + array[i].district + "</td><td>" + array[i].house + "</td><td>" + array[i].heating + "</td><td>" + array[i].cost + "</td></tr>";
+	}
+	tableLivings+="</table>";
+	document.write(tableLivings);
+	document.getElementById("tableLivings").innerHTML=JSON.stringify(array);
+	if (document.getElementById("tableLivings").style.display === "block") {
+		document.getElementById("tableLivings").style.display = "none";
+    } else {
+        document.getElementById("tableLivings").style.display = "block";
+    }
+}
+
+function addGroups() {
+    document.getElementById("addGroups");
+    if (document.getElementById("addGroups").style.display === "block") {
+        document.getElementById("addGroups").style.display = "none";
+    } else {
+        document.getElementById("addGroups").style.display = "block";
+    }
+}
+
+function addUsers() {
+    document.getElementById("addUsers");
+    if (document.getElementById("addUsers").style.display === "block") {
+        document.getElementById("addUsers").style.display = "none";
+    } else {
+        document.getElementById("addUsers").style.display = "block";
+    }
+}
+
+function postGroups(){
+	 var groupName=document.getElementById("group");
+	 var jsonData = '{"name":' + JSON.stringify(groupName.value) + '}';
+	 var request = new XMLHttpRequest();
+	 request.open("POST", "http://localhost:8000/groups/", false);
+	 request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	 request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
+	 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	 request.send(jsonData); 
+	 var array = JSON.parse(request.responseText);
+	 console.log(array);
+}
+
+function deleteGroups(url){
+	 var groupName=document.getElementById("group");
+	 var jsonData = '{"name":' + JSON.stringify(groupName.value) + '}';
+	 var request = new XMLHttpRequest();
+	 request.open("DELETE", "http://localhost:8000/groups/", false);
+	 request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	 request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
+	 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	 request.send(jsonData); 
+	 var array = JSON.parse(request.responseText);
+	 console.log(array);
+}
+
+function putGroups(){
+	 var groupName=document.getElementById("group");
+	 var jsonData = '{"name":' + JSON.stringify(groupName.value) + '}';
+	 var request = new XMLHttpRequest();
+	 request.open("PUT", "http://localhost:8000/groups/", false);
+	 request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	 request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
+	 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	 request.send(jsonData); 
+	 var array = JSON.parse(request.responseText);
+	 console.log(array);
+}
+
+function postUsers(){
+	 var username=document.getElementById("username");
+	 var email=document.getElementById("email");
+	 var jsonData = '{"username":' + JSON.stringify(username.value) + ', "email":' + JSON.stringify(email.value) + '}';
+	 var request = new XMLHttpRequest();
+	 request.open("POST", "http://localhost:8000/users/", false);
+	 request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	 request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
+	 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	 request.send(jsonData); 
+	 var array = JSON.parse(request.responseText);
+	 console.log(array);
+}
+
+function putUsers(){
+	 var username=document.getElementById("username");
+	 var email=document.getElementById("email");
+	 var jsonData = '{"username":' + JSON.stringify(username.value) + ', "email":' + JSON.stringify(email.value) + '}';
+	 var request = new XMLHttpRequest();
+	 request.open("PUT", "http://localhost:8000/users/", false);
+	 request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	 request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
+	 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	 request.send(jsonData); 
+	 var array = JSON.parse(request.responseText);
+	 console.log(array);
+}
+
+function deleteUsers(url){
+	 var username=document.getElementById("username");
+	 var email=document.getElementById("email");
+	 var jsonData = '{"username":' + JSON.stringify(username.value) + ', "email":' + JSON.stringify(email.value) + '}';
+	 var request = new XMLHttpRequest();
+	 request.open("DELETE", "http://localhost:8000/users/", false);
+	 request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	 request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
+	 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	 request.send(jsonData); 
+	 var array = JSON.parse(request.responseText);
+	 console.log(array);
+}
+
+function addCars() {
+    document.getElementById("addCars");
+    if (document.getElementById("addCars").style.display === "block") {
+		document.getElementById("addCars").style.display = "none";
+    } else {
+        document.getElementById("addCars").style.display = "block";
+    }
+}
+
+function postCars(){
+	 var make=document.getElementById("make");
+	 //{"make":"Volvo", "model":"240"}
+	 //var jsonData = '{"make":' + JSON.stringify(make.value) + '}';
+	 var model=document.getElementById("model");
+	 //var jsonData = '{"model":' + JSON.stringify(model.value) + '}';
+	 var year=document.getElementById("year");
+	 //var jsonData = '{"year":' + JSON.stringify(year.value) + '}';
+	 var plate=document.getElementById("plate");
+	 //var jsonData = '{"plate":' + JSON.stringify(plate.value) + '}';
+	 var color=document.getElementById("color");
+	 var jsonData = '{"make":' + JSON.stringify(make.value) + ', "model":' + JSON.stringify(model.value) + ', "year":' + JSON.stringify(year.value) + ', "plate":' + JSON.stringify(plate.value) + ', "color":' + JSON.stringify(color.value) + '}';
+	 console.log(jsonData);
+	 var request = new XMLHttpRequest();
+	 request.open("POST", "http://localhost:8000/cars/", false);
+	 request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	 request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
+	 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	 request.send(jsonData); 
+	 var array = JSON.parse(request.responseText);
+	 console.log(array);
+}
+
+function deleteCars(url){
+	 var make=document.getElementById("make");
+	 var model=document.getElementById("model");
+	 var year=document.getElementById("year");
+	 var plate=document.getElementById("plate");
+	 var color=document.getElementById("color");
+	 var jsonData = '{"make":' + JSON.stringify(make.value) + ', "model":' + JSON.stringify(model.value) + ', "year":' + JSON.stringify(year.value) + ', "plate":' + JSON.stringify(plate.value) + ', "color":' + JSON.stringify(color.value) + '}';
+	 console.log(jsonData);
+	 var request = new XMLHttpRequest();
+	 request.open("DELETE", "http://localhost:8000/cars/", false);
+	 request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	 request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
+	 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	 request.send(jsonData); 
+	 var array = JSON.parse(request.responseText);
+	 console.log(array);
+}
+
+function putCars(){
+	 var make=document.getElementById("make");
+	 var model=document.getElementById("model");
+	 var year=document.getElementById("year");
+	 var plate=document.getElementById("plate");
+	 var color=document.getElementById("color");
+	 var jsonData = '{"make":' + JSON.stringify(make.value) + ', "model":' + JSON.stringify(model.value) + ', "year":' + JSON.stringify(year.value) + ', "plate":' + JSON.stringify(plate.value) + ', "color":' + JSON.stringify(color.value) + '}';
+	 console.log(jsonData);
+	 var request = new XMLHttpRequest();
+	 request.open("PUT", "http://localhost:8000/cars/", false);
+	 request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	 request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
+	 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	 request.send(jsonData); 
+	 var array = JSON.parse(request.responseText);
+	 console.log(array);
+	}
+
+function addLivings() {
+    document.getElementById("addLivings");
+    if (document.getElementById("addLivings").style.display === "block") {
+        document.getElementById("addLivings").style.display = "none";
+    } else {
+        document.getElementById("addLivings").style.display = "block";
+    }
+}
+
+function postLivings(){
+	 var city=document.getElementById("city");
+	 var district=document.getElementById("district");
+	 var house=document.getElementById("house");
+	 var heating=document.getElementById("heating");
+	 var cost=document.getElementById("cost");
+	 var jsonData = '{"city":' + JSON.stringify(city.value) + ', "district":' + JSON.stringify(district.value) + ', "house":' + JSON.stringify(house.value) + ', "heating":' + JSON.stringify(heating.value) + ', "cost":' + JSON.stringify(cost.value) + '}';
+	 console.log(jsonData);
+	 var request = new XMLHttpRequest();
+	 request.open("POST", "http://localhost:8000/livings/", false);
+	 request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	 request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
+	 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	 request.send(jsonData); 
+	 var array = JSON.parse(request.responseText);
+	 console.log(array);
+}
+
+function deleteLivings(url){
+	 var city=document.getElementById("city");
+	 var district=document.getElementById("district");
+	 var house=document.getElementById("house");
+	 var heating=document.getElementById("heating");
+	 var cost=document.getElementById("cost");
+	 var jsonData = '{"city":' + JSON.stringify(city.value) + ', "district":' + JSON.stringify(district.value) + ', "house":' + JSON.stringify(house.value) + ', "heating":' + JSON.stringify(heating.value) + ', "cost":' + JSON.stringify(cost.value) + '}';
+	 console.log(jsonData);
+	 var request = new XMLHttpRequest();
+	 request.open("DELETE", "http://localhost:8000/livings/", false);
+	 request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	 request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
+	 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	 request.send(jsonData); 
+	 var array = JSON.parse(request.responseText);
+	 console.log(array);
+}
+
+function putLivings(){
+	 var city=document.getElementById("city");
+	 var district=document.getElementById("district");
+	 var house=document.getElementById("house");
+	 var heating=document.getElementById("heating");
+	 var cost=document.getElementById("cost");
+	 var jsonData = '{"city":' + JSON.stringify(city.value) + ', "district":' + JSON.stringify(district.value) + ', "house":' + JSON.stringify(house.value) + ', "heating":' + JSON.stringify(heating.value) + ', "cost":' + JSON.stringify(cost.value) + '}';
+	 console.log(jsonData);
+	 var request = new XMLHttpRequest();
+	 request.open("PUT", "http://localhost:8000/livings/", false);
+	 request.setRequestHeader("Authorization", "Basic " + btoa("admin:password123"));
+	 request.setRequestHeader("X-CSRFToken", readCookie("csrftoken"));
+	 request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	 request.send(jsonData); 
+	 var array = JSON.parse(request.responseText);
+	 console.log(array);
+	}
+
+function readCookie(name) {
+	 var nameEQ = encodeURIComponent(name) + "=";
+	 var ca = document.cookie.split(';');
+	 for (var i = 0; i < ca.length; i++) {
+		 var c = ca[i];
+		 while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+		 if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
+	 }
+	 return null;
+}
+</script>
+</html>
